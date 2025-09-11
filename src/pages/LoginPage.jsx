@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import BlueBackground from "../assets/img/BlueBackground.jpg";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthProvider";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,29 +21,28 @@ export default function LoginPage() {
     try {
       const res = await fetch("http://localhost:5001/api/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Login failed");
-      }
+      if (!res.ok) throw new Error(data.message || "Login failed");
 
-      localStorage.setItem("token", data.token);
+      // ✅ gọi login trong context, sẽ tự set token + user
+      login(data.token, data.user);
 
       toast.success("Login thành công!");
-      setError("");
-      // navigate("/account"); nếu bạn dùng react-router
+      navigate("/account");
     } catch (err) {
       setError(err.message);
+      toast.error(err.message);
+      console.error("Login error:", error);
     } finally {
       setLoading(false);
     }
   };
+
   return (
     <div
       className="h-screen w-screen flex items-center justify-center"
@@ -54,6 +57,7 @@ export default function LoginPage() {
           Login
         </h1>
 
+        {/* ✅ bọc luôn nút login trong form */}
         <form className="space-y-4" onSubmit={handleSubmit}>
           {/* Email */}
           <div>
@@ -92,13 +96,8 @@ export default function LoginPage() {
               </i>
             </div>
           </div>
-
-          {/* Error */}
-          <div className="min-h-[20px]">
-            {error && <p className="text-red-400 text-sm">{error}</p>}
-          </div>
-
-          {/* Nút Login */}
+          <div></div>
+          {/* ✅ nút Login để trong form */}
           <button
             type="submit"
             disabled={loading}
@@ -106,15 +105,18 @@ export default function LoginPage() {
           >
             {loading ? "Loading..." : "Login"}
           </button>
+        </form>
 
+        <div className="">
           {/* Nút Create Account */}
           <button
+            onClick={() => navigate("/register")}
             type="button"
-            className="w-full py-2 rounded-lg bg-white/30 hover:bg-white/40 transition text-white font-semibold shadow-md"
+            className="w-full py-2 mt-4 rounded-lg bg-white/30 hover:bg-white/40 transition text-white font-semibold shadow-md"
           >
             Create Account
           </button>
-        </form>
+        </div>
 
         <p className="text-center text-sm text-gray-200 mt-4">
           Forget your password?{" "}

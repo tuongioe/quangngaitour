@@ -45,11 +45,11 @@ export default function HeaderComponent() {
       <div className="w-full flex items-center justify-center fixed z-50 lg:ml-2">
         <div className="lg:w-full max-w-6xl flex justify-between items-center bg-gray-100/30 shadow-lg backdrop-blur-md px-8 py-4 rounded-2xl mt-5">
           {/* Logo */}
-          <h1 className="lg:block hidden text-white text-2xl font-semibold cursor-pointer">
+          <div className="lg:block hidden text-white text-2xl font-semibold cursor-pointer">
             <span className="text-3xl font-bold bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 bg-clip-text text-transparent">
               QuangNgaiTour
             </span>
-          </h1>
+          </div>
 
           {/* Menu */}
           <nav className="flex space-x-8">

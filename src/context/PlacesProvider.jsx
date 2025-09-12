@@ -1,4 +1,3 @@
-// src/context/PlacesContext.jsx
 import { useState, useEffect } from "react";
 import { createContext } from "react";
 

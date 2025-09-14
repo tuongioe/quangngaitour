@@ -1,12 +1,11 @@
 import React, { useContext, useState } from "react";
 import "../assets/styles/HeaderComponent.css";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../context/AuthProvider"; // import context
+import { AuthContext } from "../context/AuthProvider";
 
 export default function HeaderComponent() {
   const navigate = useNavigate();
-  const { logout } = useContext(AuthContext);
-  const { user } = useContext(AuthContext); // lấy user từ context
+  const { logout, user } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleAccountClick = () => {
@@ -16,14 +15,14 @@ export default function HeaderComponent() {
       navigate("/login");
     }
   };
+
   const handleLogout = async () => {
     try {
+      // gọi API backend
       const res = await fetch("http://localhost:5001/api/auth/logout", {
         method: "POST",
-        credentials: "include", // gửi cookie kèm
-        headers: {
-          "Content-Type": "application/json",
-        },
+        credentials: "include", // gửi cookie kèm nếu BE dùng cookie
+        headers: { "Content-Type": "application/json" },
       });
 
       if (!res.ok) {
@@ -31,8 +30,7 @@ export default function HeaderComponent() {
         throw new Error(data.message || "Logout failed");
       }
 
-      // Xoá token localStorage nếu có
-      localStorage.removeItem("token");
+      // clear FE state
       logout();
       navigate("/login");
     } catch (err) {
@@ -80,7 +78,7 @@ export default function HeaderComponent() {
                 {user ? user.name || "Account" : "Login"}
               </span>
 
-              {/* Dropdown khi hover */}
+              {/* Dropdown */}
               {user && showDropdown && (
                 <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2">
                   <button

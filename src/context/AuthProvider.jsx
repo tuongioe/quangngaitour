@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
-import { createContext } from "react";
+import { useState, useEffect, createContext } from "react";
 
 const AuthContext = createContext();
 
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(null); // Lưu thông tin user
+  const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  // Nếu có token thì call API lấy thông tin user
+  // Khi có token -> call API lấy user info
   useEffect(() => {
     if (token) {
       fetch("http://localhost:5001/api/auth/me", {
@@ -15,24 +14,29 @@ function AuthProvider({ children }) {
           Authorization: `Bearer ${token}`,
         },
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error("Unauthorized");
+          return res.json();
+        })
         .then((data) => {
-          if (data?.user) {
-            setUser(data.user);
-          }
+          if (data?.user) setUser(data.user);
         })
         .catch(() => {
-          logout();
+          logout(); // token hết hạn -> logout FE
         });
+    } else {
+      setUser(null);
     }
   }, [token]);
 
+  // login FE: lưu token + user
   const login = (token, userData) => {
     localStorage.setItem("token", token);
     setToken(token);
     setUser(userData);
   };
 
+  // logout FE: chỉ xoá localStorage + state
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);

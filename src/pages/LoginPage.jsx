@@ -1,9 +1,14 @@
 import { useState, useContext } from "react";
 import BlueBackground from "../assets/img/BlueBackground.jpg";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
+import {
+  EyeIcon,
+  EyeSlashIcon,
+  XCircleIcon,
+} from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthProvider";
+import axios from "axios";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,29 +19,31 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  const hadnleClearPassword = () => {
+    setPassword("");
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+      const res = await axios.post("http://localhost:5001/api/auth/login", {
+        email,
+        password,
       });
 
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.message || "Login failed");
-
       // ✅ gọi login trong context, sẽ tự set token + user
-      login(data.token, data.user);
+      login(res.data.token, res.data.user);
 
       toast.success("Login thành công!");
       navigate("/account");
     } catch (err) {
-      setError(err.message);
-      toast.error(err.message);
+      // err.response.data.message thường có message từ server
+      const message =
+        err.response?.data?.message || err.message || "Login failed";
+
+      setError(message);
+      toast.error(message);
       console.error("Login error:", error);
     } finally {
       setLoading(false);
@@ -45,7 +52,7 @@ export default function LoginPage() {
 
   return (
     <div
-      className="h-screen w-screen flex items-center justify-center"
+      className="h-screen w-screen bg-cover flex items-center justify-center"
       style={{
         backgroundImage: `url(${BlueBackground})`,
         backgroundSize: "cover",
@@ -67,7 +74,7 @@ export default function LoginPage() {
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
               required
             />
           </div>
@@ -81,9 +88,15 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-200"
                 required
               />
+              <i
+                className="absolute right-14 top-1/2 -translate-y-1/2 cursor-pointer"
+                onClick={hadnleClearPassword}
+              >
+                <XCircleIcon className="h-5 w-5 text-gray-300" />
+              </i>
               <i
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-white cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
@@ -101,7 +114,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition text-white font-semibold shadow-md disabled:opacity-50"
+            className="w-full py-2 rounded-lg bg-blue-700/30 hover:bg-blue-600/20 transition text-white font-semibold shadow-md disabled:opacity-50"
           >
             {loading ? "Loading..." : "Login"}
           </button>
@@ -120,7 +133,7 @@ export default function LoginPage() {
 
         <p className="text-center text-sm text-gray-200 mt-4">
           Forget your password?{" "}
-          <a href="#" className="text-blue-300 hover:underline">
+          <a href="#" className="text-indigo-500 hover:text-indigo-600">
             Reset password
           </a>
         </p>

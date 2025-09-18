@@ -14,7 +14,7 @@ export default function Layout() {
       </main>
 
       {/* Footer */}
-      <FooterComponent />
+      <FooterComponent className="absolute bg-transparent" />
     </div>
   );
 }

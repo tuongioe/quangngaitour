@@ -11,6 +11,7 @@ import PlaceDetailPage from "./pages/PlaceDetailPage.jsx";
 import PlacePage from "./pages/PlacePage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
+import "./i18n";
 
 export default function App() {
   return (

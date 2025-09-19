@@ -114,7 +114,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 rounded-lg bg-blue-700/30 hover:bg-blue-600/20 transition text-white font-semibold shadow-md disabled:opacity-50"
+            className="w-full py-2 rounded-lg bg-blue-700/30 hover:bg-blue-600/20 transition border-none text-white font-semibold shadow-md disabled:opacity-50"
           >
             {loading ? "Loading..." : "Login"}
           </button>
@@ -125,7 +125,7 @@ export default function LoginPage() {
           <button
             onClick={() => navigate("/register")}
             type="button"
-            className="w-full py-2 mt-4 rounded-lg bg-white/30 hover:bg-white/40 transition text-white font-semibold shadow-md"
+            className="w-full py-2 mt-4 rounded-lg bg-white/30 hover:bg-white/20 border-none transition text-white font-semibold shadow-md"
           >
             Create Account
           </button>

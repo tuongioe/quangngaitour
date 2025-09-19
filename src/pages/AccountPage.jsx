@@ -7,31 +7,73 @@ import {
   ArrowLeftStartOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 import BlueBackground from "../assets/img/BlueBackground.jpg";
+import axiosClient from "../utils/axiosClient";
+import axios from "axios";
 
-export default function AccountPage() {
+export default function AccountPage({ userId }) {
   const [user, setUser] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [activeTab, setActiveTab] = useState("profile");
-
   const [editMode, setEditMode] = useState({});
   const [editedUser, setEditedUser] = useState({});
   const [showAvatarInput, setShowAvatarInput] = useState(false);
   const [newAvatar, setNewAvatar] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "destination", // mặc định
+    description: "",
+    address: "",
+    images: [""], // mảng URL ảnh
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleImageChange = (index, value) => {
+    const newImages = [...formData.images];
+    newImages[index] = value;
+    setFormData({ ...formData, images: newImages });
+  };
+
+  const addImageField = () => {
+    setFormData({ ...formData, images: [...formData.images, ""] });
+  };
+
+  const handleAddPlace = async (e) => {
+    e.preventDefault();
+    try {
+      const token = localStorage.getItem("token"); // lấy token sau khi login
+
+      const res = await axios.post(
+        "http://localhost:5001/api/places",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // gửi kèm token
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      alert("Thêm địa điểm thành công!");
+      console.log("Place:", res.data);
+    } catch (error) {
+      console.error("Error when adding place:", error);
+      alert(error.response?.data?.message || "Lỗi khi thêm địa điểm");
+    }
+  };
 
   // Fetch user info
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/users/me", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        const data = await res.json();
-        setUser(data);
-        setEditedUser(data);
-        if (data?._id) {
-          fetchFavorites(data._id);
+        const res = await axiosClient.get("/users/me");
+        setUser(res.data);
+        setEditedUser(res.data);
+        if (res.data?._id) {
+          fetchFavorites(res.data._id);
         }
       } catch (err) {
         console.error("Error fetching user:", err);
@@ -43,49 +85,50 @@ export default function AccountPage() {
   // Fetch favorites
   const fetchFavorites = async (userId) => {
     try {
-      const res = await fetch(
-        `http://localhost:5001/api/users/${userId}/favorites`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-      const data = await res.json();
-      setFavorites(data);
+      const res = await axiosClient.get(`/users/${userId}/favorites`);
+      setFavorites(res.data);
     } catch (err) {
       console.error("Error fetching favorites:", err);
     }
   };
+  useEffect(() => {
+    if (userId) {
+      fetchFavorites(userId);
+    }
+  }, [userId]);
 
   // Logout
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    window.location.href = "/login";
+  const handleLogout = async () => {
+    try {
+      await axiosClient.post("/auth/logout"); // gọi BE clear cookie nếu có
+    } catch (err) {
+      console.error("Logout request error:", err);
+    } finally {
+      localStorage.removeItem("token");
+      window.location.href = "/login";
+    }
   };
 
   // Save profile
   const handleSave = async () => {
     try {
       const { name, phone, address, avatar } = editedUser;
-      const res = await fetch("http://localhost:5001/api/users/me", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ name, phone, address, avatar }),
+      const res = await axiosClient.put("/users/me", {
+        name,
+        phone,
+        address,
+        avatar,
       });
-      const data = await res.json();
-      setUser(data);
-      setEditedUser(data);
+      setUser(res.data);
+      setEditedUser(res.data);
       setEditMode({});
       setShowAvatarInput(false);
-      console.log("User updated:", data);
+      console.log("User updated:", res.data);
     } catch (err) {
       console.error("Error saving user:", err);
     }
   };
+  //Add new place
 
   return (
     <div
@@ -269,12 +312,113 @@ export default function AccountPage() {
             </div>
           )}
 
-          {activeTab === "favorite" && (
-            <h2 className="text-2xl font-bold">Your Favorite Places</h2>
+          {activeTab === "add" && (
+            <div>
+              <h2 className="text-2xl font-bold">Add new place</h2>
+              <form
+                onSubmit={handleAddPlace}
+                className="space-y-3 p-4 border rounded"
+              >
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Tên địa điểm"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="border p-2 w-full text-black bg-white"
+                  required
+                />
+
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="border p-2 w-full text-black bg-white"
+                  required
+                >
+                  <option value="destination">Destination</option>
+                  <option value="restaurant">Restaurant</option>
+                </select>
+
+                <textarea
+                  name="description"
+                  placeholder="Mô tả"
+                  value={formData.description}
+                  onChange={handleChange}
+                  className="border p-2 w-full  text-black bg-white"
+                />
+
+                <input
+                  type="text"
+                  name="address"
+                  placeholder="Địa chỉ"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="border p-2 w-full  text-black bg-white"
+                  required
+                />
+
+                <div>
+                  <label className="block mb-1">Ảnh (URL):</label>
+                  {formData.images.map((img, index) => (
+                    <input
+                      key={index}
+                      type="text"
+                      value={img}
+                      onChange={(e) => handleImageChange(index, e.target.value)}
+                      placeholder={`Ảnh ${index + 1}`}
+                      className="border p-2 w-full mb-2  text-black bg-white"
+                    />
+                  ))}
+                  <button
+                    type="button"
+                    onClick={addImageField}
+                    className="bg-gray-200 px-3 py-1 rounded"
+                  >
+                    + Thêm ảnh
+                  </button>
+                </div>
+
+                <button
+                  type="submit"
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                >
+                  Thêm địa điểm
+                </button>
+              </form>
+            </div>
           )}
 
-          {activeTab === "add" && (
-            <h2 className="text-2xl font-bold">Add a New Place</h2>
+          {activeTab === "favorite" && (
+            <div>
+              <h2 className="text-2xl font-bold">Your Favorite Places</h2>
+              {favorites.length === 0 ? (
+                <p>Chưa có địa điểm yêu thích nào.</p>
+              ) : (
+                <ul className="space-y-4">
+                  {favorites.map((fav) => (
+                    <li
+                      key={fav._id}
+                      className="p-4 border rounded-lg shadow-sm bg-white"
+                    >
+                      {/* Nếu backend populate Place thì có fav.place */}
+                      <h3 className="text-lg font-semibold">
+                        {fav.place?.name}
+                      </h3>
+                      <p className="text-gray-600">{fav.place?.address}</p>
+
+                      {fav.place?.images?.length > 0 && (
+                        <img
+                          src={fav.place.images[0]}
+                          alt={fav.place.name}
+                          className="mt-2 w-48 h-32 object-cover rounded"
+                        />
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           )}
         </div>
       </div>

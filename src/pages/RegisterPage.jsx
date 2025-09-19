@@ -6,6 +6,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +15,7 @@ export default function RegisterPage() {
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const hadnleClearPassword = () => {
     setPassword("");
@@ -43,7 +45,7 @@ export default function RegisterPage() {
       setEmail("");
       setPassword("");
       setPhone("");
-      // navigate("/login"); nếu bạn dùng react-router
+      navigate("/login");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -132,7 +134,7 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 rounded-lg bg-blue-500 hover:bg-blue-600 transition text-white font-semibold shadow-md disabled:opacity-50"
+            className="w-full py-2 rounded-lg bg-blue-700/30 hover:bg-blue-600/20 border-none transition text-white font-semibold shadow-md disabled:opacity-50"
           >
             {loading ? "Loading..." : "Register"}
           </button>
@@ -140,7 +142,10 @@ export default function RegisterPage() {
 
         <p className="text-center text-sm text-gray-200 mt-4">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-300 hover:underline">
+          <a
+            href="/login"
+            className="text-blue-indigo-500 hover:text-indigo-600"
+          >
             Login
           </a>
         </p>

@@ -20,10 +20,10 @@ export default function AccountPage({ userId }) {
   const [newAvatar, setNewAvatar] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    category: "destination", // mặc định
+    category: "destination",
     description: "",
     address: "",
-    images: [""], // mảng URL ảnh
+    images: [""],
   });
 
   const handleChange = (e) => {
@@ -87,6 +87,7 @@ export default function AccountPage({ userId }) {
     try {
       const res = await axiosClient.get(`/users/${userId}/favorites`);
       setFavorites(res.data);
+      console.log(res.data);
     } catch (err) {
       console.error("Error fetching favorites:", err);
     }
@@ -190,26 +191,26 @@ export default function AccountPage({ userId }) {
                 className="px-2 py-1 rounded text-black"
               />
             ) : (
-              <h2 className="text-2xl font-bold text-blue-500">
+              <h2 className="text-2xl font-bold text-blue-500/70">
                 {editedUser?.name || "Loading..."}
               </h2>
             )}
             <PencilSquareIcon
-              className="w-6 h-6 text-gray-200 cursor-pointer hover:text-white"
+              className="w-6 h-6 text-white cursor-pointer hover:text-gray-200"
               onClick={() => setEditMode({ ...editMode, name: !editMode.name })}
             />
           </div>
 
           {/* Role */}
-          <p className="text-lg text-gray-200">{editedUser?.role || ""}</p>
+          <p className="text-lg text-gray-100">{editedUser?.role || ""}</p>
 
           {/* Menu */}
-          <div className="mt-8 w-full space-y-3">
+          <div className="mt-8 w-48 space-y-3">
             <button
-              className={`flex items-center gap-3 px-4 py-2 w-full rounded-xl ${
+              className={`flex items-center gap-3 px-4 py-2 w-full rounded-xl bg-transparent text-bold border-none text-white ${
                 activeTab === "profile"
-                  ? "bg-white/30 text-white"
-                  : "hover:bg-white/20 text-gray-200"
+                  ? "bg-blue-600/30 text-white"
+                  : "hover:bg-gray-200/30 text-white"
               }`}
               onClick={() => setActiveTab("profile")}
             >
@@ -217,10 +218,10 @@ export default function AccountPage({ userId }) {
             </button>
 
             <button
-              className={`flex items-center gap-3 px-4 py-2 w-full rounded-xl ${
+              className={`flex items-center gap-3 px-4 py-2 w-full rounded-xl bg-transparent text-bold border-none text-white ${
                 activeTab === "favorite"
-                  ? "bg-white/30 text-white"
-                  : "hover:bg-white/20 text-gray-200"
+                  ? "bg-blue-600/30 text-white"
+                  : "hover:bg-white/30 text-gray-200"
               }`}
               onClick={() => setActiveTab("favorite")}
             >
@@ -228,10 +229,10 @@ export default function AccountPage({ userId }) {
             </button>
 
             <button
-              className={`flex items-center gap-3 px-4 py-2 w-full rounded-xl ${
+              className={`flex items-center gap-3 px-4 py-2 w-full rounded-xl bg-transparent text-bold border-none text-white ${
                 activeTab === "add"
-                  ? "bg-white/30 text-white"
-                  : "hover:bg-white/20 text-gray-200"
+                  ? "bg-blue-600/30 text-white"
+                  : "hover:bg-white/30 text-white"
               }`}
               onClick={() => setActiveTab("add")}
             >
@@ -239,7 +240,7 @@ export default function AccountPage({ userId }) {
             </button>
 
             <button
-              className="flex items-center gap-3 px-4 py-2 w-full rounded-xl hover:bg-red-500/40 text-red-200"
+              className="flex items-center gap-3 px-4 py-2 w-full rounded-xl hover:bg-red-600/70 hover:text-white bg-transparent text-bold text-red-500"
               onClick={handleLogout}
             >
               <ArrowLeftStartOnRectangleIcon className="w-5 h-5" /> Logout
@@ -250,7 +251,7 @@ export default function AccountPage({ userId }) {
         {/* Content */}
         <div className="w-2/3 p-8 overflow-y-auto text-white">
           {activeTab === "profile" && (
-            <div>
+            <div className="lg:w-full">
               <h2 className="text-2xl font-bold mb-6">Profile Information</h2>
 
               {/* Email (chỉ hiển thị) */}
@@ -259,20 +260,20 @@ export default function AccountPage({ userId }) {
               </div>
 
               {/* Phone */}
-              <div className="bg-white/20 rounded-xl p-4 mb-4 flex justify-between items-center">
+              <div className="bg-white/20 rounded-xl p-4 mb-4 flex justify-between items-center text-semibold">
                 {editMode.phone ? (
                   <input
                     value={editedUser.phone || ""}
                     onChange={(e) =>
                       setEditedUser({ ...editedUser, phone: e.target.value })
                     }
-                    className="px-2 py-1 rounded text-black"
+                    className="px-2 py-1 rounded bg-gray-300/50 text-white"
                   />
                 ) : (
                   <p>Phone: {editedUser?.phone || "N/A"}</p>
                 )}
                 <PencilSquareIcon
-                  className="w-5 h-5 text-gray-300 cursor-pointer hover:text-white"
+                  className="w-5 h-5 text-white cursor-pointer hover:text-gray-200"
                   onClick={() =>
                     setEditMode({ ...editMode, phone: !editMode.phone })
                   }

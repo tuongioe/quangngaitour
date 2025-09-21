@@ -4,12 +4,18 @@ import { AuthContext } from "../context/AuthProvider";
 import { useTranslation } from "react-i18next";
 import Logo from "../assets/img/logo.png";
 import "../assets/styles/HeaderComponent.css";
+import { Bars3BottomRightIcon } from "@heroicons/react/16/solid";
 
 export default function HeaderComponent() {
   const navigate = useNavigate();
   const { logout, user } = useContext(AuthContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const { t, i18n } = useTranslation();
+  const [toggleMenu, setToggleMenu] = useState(false);
+
+  const handleToggleMenu = () => {
+    setToggleMenu((prev) => !prev);
+  };
 
   const handleChangeLanguage = (lang) => {
     i18n.changeLanguage(lang);
@@ -57,8 +63,53 @@ export default function HeaderComponent() {
           </Link>
         </div>
 
-        {/* Cột giữa: Menu */}
-        <nav className="hidden md:flex gap-8 justify-center lg:mr-20">
+        {/* Mobile Menu */}
+        <div className="lg:hidden " onClick={handleToggleMenu}>
+          <i>
+            <Bars3BottomRightIcon className="w-6 h-6 text-white cursor-pointer" />
+          </i>
+          {toggleMenu && (
+            <nav className="h-50 absolute top-14 left-0 w-full py-2 bg-gray-200/30 text-white shadow-lg z-40">
+              <ul className="text-center">
+                <li>
+                  <Link
+                    to="/about"
+                    className="nav-link text-white font-semibold py-2"
+                  >
+                    {t("about")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/places?category=destinations"
+                    className="nav-link text-white font-semibold py-2"
+                  >
+                    {t("destinations")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/places?category=restaurants"
+                    className="nav-link text-white font-semibold py-2"
+                  >
+                    {t("restaurants")}
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    to="/speciality"
+                    className="nav-link text-white font-semibold py-2"
+                  >
+                    {t("speciality")}
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          )}
+        </div>
+
+        {/* Desktop Menu */}
+        <nav className="hidden lg:flex gap-8 justify-center lg:mr-20 ">
           <Link to="/about" className="nav-link text-white font-semibold">
             {t("about")}
           </Link>
@@ -87,8 +138,11 @@ export default function HeaderComponent() {
             onChange={(e) => handleChangeLanguage(e.target.value)}
             className="bg-transparent text-white border border-white rounded px-2 py-1 text-sm cursor-pointer"
           >
-            <option value="vn">VN</option>
-            <option value="en">EN</option>
+            <div>
+              {" "}
+              <option value="vn">VN</option>
+              <option value="en">EN</option>
+            </div>
           </select>
 
           {/* Tài khoản / Login */}
@@ -99,23 +153,23 @@ export default function HeaderComponent() {
           >
             <span
               onClick={handleAccountClick}
-              className="text-white font-semibold cursor-pointer"
+              className="text-white font-semibold cursor-pointer nav-link"
             >
               {user ? user.name || t("account") : t("login")}
             </span>
 
             {/* Dropdown */}
             {user && showDropdown && (
-              <div className="absolute right-0 mt-2 w-40 bg-white rounded-lg shadow-lg py-2">
+              <div className="absolute right-0 mt-2 w-50 h-30 bg-white/40 rounded-lg shadow-lg py-2">
                 <button
                   onClick={() => navigate("/account")}
-                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  className="block w-full h-full text-center px-4 py-2 text-gray-700 bg-transparent"
                 >
                   {t("account")}
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="block w-full text-left px-4 py-2 text-red-500 hover:bg-gray-100"
+                  className="block w-full h-full text-center px-4 py-2 text-red-500 bg-transparent"
                 >
                   {t("logout")}
                 </button>

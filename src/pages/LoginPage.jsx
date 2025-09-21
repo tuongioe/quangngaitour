@@ -59,7 +59,7 @@ export default function LoginPage() {
         backgroundPosition: "center",
       }}
     >
-      <div className="bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg rounded-2xl p-8 lg:w-full max-w-md">
+      <div className="bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg rounded-2xl p-8 lg:w-full lg:max-w-md w-96">
         <h1 className="text-3xl font-bold text-center text-white mb-6">
           Login
         </h1>
@@ -98,7 +98,7 @@ export default function LoginPage() {
                 <XCircleIcon className="h-5 w-5 text-gray-300" />
               </i>
               <i
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
@@ -109,8 +109,8 @@ export default function LoginPage() {
               </i>
             </div>
           </div>
-          <div></div>
-          {/* ✅ nút Login để trong form */}
+
+          {/* Login Button */}
           <button
             type="submit"
             disabled={loading}

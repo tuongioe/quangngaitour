@@ -6,7 +6,7 @@ import {
   XCircleIcon,
 } from "@heroicons/react/24/outline";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -62,7 +62,7 @@ export default function RegisterPage() {
         backgroundPosition: "center",
       }}
     >
-      <div className="bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg rounded-2xl p-8 lg:w-full max-w-md">
+      <div className="bg-white/20 backdrop-blur-lg border border-white/30 shadow-lg rounded-2xl p-8 lg:w-full lg:max-w-md w-96">
         <h1 className="text-3xl font-bold text-center text-white mb-6">
           Register
         </h1>
@@ -100,7 +100,7 @@ export default function RegisterPage() {
                 <XCircleIcon className="h-5 w-5 text-gray-300" />
               </i>
               <i
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-white cursor-pointer"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-white/60 cursor-pointer"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (

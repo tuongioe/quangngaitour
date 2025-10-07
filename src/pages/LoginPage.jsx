@@ -17,11 +17,13 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const hadnleClearPassword = () => {
     setPassword("");
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

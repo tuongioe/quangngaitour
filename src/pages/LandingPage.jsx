@@ -1,12 +1,10 @@
 import React from "react";
-import HeaderComponent from "../components/HeaderComponent";
+import HeroSection from "../components/HeroSection";
 
 export default function LandingPage() {
   return (
-    <div>
-      <div>
-        <HeaderComponent />
-      </div>
+    <div className="bg-blue-50 min-h-screen">
+      <HeroSection />
     </div>
   );
 }

@@ -14,13 +14,42 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [error, setError] = useState("");
+  const [strength, setStrength] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const hadnleClearPassword = () => {
     setPassword("");
   };
+  const checkPasswordStrength = (pwd) => {
+    let strengthValue = 0;
+    if (pwd.length >= 8) strengthValue++;
+    if (/[A-Z]/.test(pwd)) strengthValue++;
+    if (/[0-9]/.test(pwd)) strengthValue++;
+    if (/[^A-Za-z0-9]/.test(pwd)) strengthValue++;
 
+    switch (strengthValue) {
+      case 0:
+      case 1:
+        setStrength("Weak");
+        break;
+      case 2:
+        setStrength("Medium");
+        break;
+      case 3:
+      case 4:
+        setStrength("Strong");
+        break;
+      default:
+        setStrength("");
+    }
+  };
+
+  const checkEmailValidation = (email) => {
+    if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email)) {
+      setError("Email must be include @gmail.com");
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -75,7 +104,10 @@ export default function RegisterPage() {
               type="email"
               placeholder="Enter your email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                checkEmailValidation(e.target.value);
+              }}
               className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
               required
             />
@@ -89,7 +121,10 @@ export default function RegisterPage() {
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  checkPasswordStrength(e.target.value);
+                }}
                 className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 text-white placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 required
               />
@@ -109,6 +144,19 @@ export default function RegisterPage() {
                   <EyeSlashIcon className="h-8 w-8" />
                 )}
               </i>
+            </div>
+            <div className="w-full h-2 bg-gray-200 rounded mt-2">
+              <div
+                className={`h-2 rounded ${
+                  strength === "Weak"
+                    ? "bg-red-500 w-1/3"
+                    : strength === "Medium"
+                    ? "bg-yellow-500 w-2/3"
+                    : strength === "Strong"
+                    ? "bg-green-500 w-full"
+                    : ""
+                }`}
+              ></div>
             </div>
           </div>
 

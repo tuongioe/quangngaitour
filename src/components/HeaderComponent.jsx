@@ -138,11 +138,9 @@ export default function HeaderComponent() {
             onChange={(e) => handleChangeLanguage(e.target.value)}
             className="bg-transparent text-white border border-white rounded px-2 py-1 text-sm cursor-pointer"
           >
-            <div>
-              {" "}
-              <option value="vn">VN</option>
-              <option value="en">EN</option>
-            </div>
+            {" "}
+            <option value="vn">VN</option>
+            <option value="en">EN</option>
           </select>
 
           {/* Tài khoản / Login */}

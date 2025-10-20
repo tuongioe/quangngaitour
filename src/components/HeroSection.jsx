@@ -3,6 +3,8 @@ import {
   MapPinIcon,
   ChevronRightIcon,
   ChevronLeftIcon,
+  ArrowRightIcon,
+  PlayCircleIcon,
 } from "@heroicons/react/16/solid";
 import { motion } from "framer-motion";
 
@@ -10,7 +12,8 @@ const locations = [
   {
     name: "Núi Thiên Ấn",
     place: "TP. Quảng Ngãi",
-    description: "Khám phá vùng đất linh thiêng",
+    description:
+      "Núi Thiên Ấn, biểu tượng linh thiêng của Quảng Ngãi, nằm bên bờ sông Trà Khúc. Trên đỉnh núi có chùa Thiên Ấn cổ kính, phong cảnh hữu tình.",
     bg: "https://res.cloudinary.com/ddwkzkht5/image/upload/v1760794809/nui-an-song-tra_1_fr1tab.png",
     video: "https://www.youtube.com/embed/ixN6iid-4p8",
     thumb:
@@ -22,7 +25,7 @@ const locations = [
     description:
       "Lý Sơn là huyện đảo thuộc tỉnh Quảng Ngãi, được mệnh danh là “thiên đường giữa biển khơi” với cảnh quan hoang sơ và hùng vĩ.",
     bg: "https://res.cloudinary.com/ddwkzkht5/image/upload/v1758526841/daot_ly_son_ltwejg.jpg",
-    video: "https://www.youtube.com/embed/VIDEO_ID_2",
+    video: "https://www.youtube.com/embed/YLuRbwYDY9Y",
     thumb:
       "https://res.cloudinary.com/ddwkzkht5/image/upload/v1758526841/daot_ly_son_ltwejg.jpg",
   },
@@ -30,9 +33,9 @@ const locations = [
     name: "Biển Mỹ Khê",
     place: "TP. Quảng Ngãi",
     description:
-      "Biển Mỹ Khê Quảng Ngãi nổi tiếng với bãi cát trắng mịn, làn nước trong xanh và hàng dừa trải dài thơ mộng.",
+      "Biển Mỹ Khê Quảng Ngãi nổi tiếng với bãi cát trắng mịn, làn nước trong xanh và hàng dừa trải dài thơ mộng. Nơi đây còn được biết đến với những món hải sản tươi ngon",
     bg: "https://res.cloudinary.com/ddwkzkht5/image/upload/v1758527548/bien-my-khe-quang-ngai-_ogy5yf.jpg",
-    video: "https://www.youtube.com/embed/VIDEO_ID_3",
+    video: "https://www.youtube.com/embed/SUlqD041Ktk",
     thumb:
       "https://res.cloudinary.com/ddwkzkht5/image/upload/v1758527548/bien-my-khe-quang-ngai-_ogy5yf.jpg",
   },
@@ -42,6 +45,10 @@ export default function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [showVideo, setShowVideo] = useState(false);
   const location = locations[current];
+
+  const handleShowVideo = () => {
+    setShowVideo(true);
+  };
 
   const handleNext = () => {
     setCurrent((prev) => (prev + 1) % locations.length);
@@ -56,23 +63,29 @@ export default function HeroSection() {
       className="relative h-screen w-screen bg-cover bg-center text-white flex items-center"
       style={{ backgroundImage: `url(${location.bg})` }}
     >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/50"></div>
-
       {/* Content */}
       <div className="relative h-[50rem] z-10 container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Left column */}
         <div className="flex flex-col justify-center">
-          <p className="text-lg mb-4 flex gap-2 uppercase items-center">
+          <p className="text-lg mb-4 flex gap-2 uppercase font-bold items-center">
             <MapPinIcon className="h-6 w-6" />
             {location.place}
           </p>
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+          <h1 className="lg:text-7xl uppercase font-bold mb-4">
             {location.name}
           </h1>
           <p className="text-md mb-6 w-[450px] leading-relaxed text-justify">
             {location.description}
           </p>
+          <div className="flex items-center space-x-4">
+            <button className="flex items-center gap-2 bg-blue-300/40 text-xl font-semibold text-white px-4 py-2 rounded-xl">
+              Explore
+              <ArrowRightIcon className="h-6 w-6" />
+            </button>
+            <i onClick={handleShowVideo}>
+              <PlayCircleIcon className="h-12 w-12 text-white cursor-pointer hover:text-white/40" />
+            </i>
+          </div>
         </div>
 
         {/* Carousel */}
@@ -80,7 +93,7 @@ export default function HeroSection() {
           <div
             className="flex gap-6 transition-transform duration-500 ease-in-out"
             style={{
-              transform: `translateX(-${current * 15}%)`,
+              transform: `translateX(-${current * 30}%)`,
             }}
           >
             {locations.map((loc, idx) => {
@@ -102,7 +115,7 @@ export default function HeroSection() {
                   }`}
                   style={{
                     width: "250px",
-                    height: "350px",
+                    height: "400px",
                     filter: isNext ? "brightness(0.5)" : "brightness(1)",
                   }}
                 >

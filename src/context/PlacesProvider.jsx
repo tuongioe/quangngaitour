@@ -3,7 +3,7 @@ import { createContext } from "react";
 
 const PlacesContext = createContext();
 
-export function PlacesProvider({ children }) {
+function PlacesProvider({ children }) {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -35,3 +35,5 @@ export function PlacesProvider({ children }) {
     </PlacesContext.Provider>
   );
 }
+
+export { PlacesContext, PlacesProvider };

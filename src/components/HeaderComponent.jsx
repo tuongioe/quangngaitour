@@ -81,7 +81,7 @@ export default function HeaderComponent() {
                 </li>
                 <li>
                   <Link
-                    to="/places?category=destinations"
+                    to="/places?category=destination"
                     className="nav-link text-white font-semibold py-2"
                   >
                     {t("destinations")}
@@ -89,7 +89,7 @@ export default function HeaderComponent() {
                 </li>
                 <li>
                   <Link
-                    to="/places?category=restaurants"
+                    to="/places?category=restaurant"
                     className="nav-link text-white font-semibold py-2"
                   >
                     {t("restaurants")}
@@ -114,13 +114,13 @@ export default function HeaderComponent() {
             {t("about")}
           </Link>
           <Link
-            to="/places?category=destinations"
+            to="/places?category=destination"
             className="nav-link text-white font-semibold"
           >
             {t("destinations")}
           </Link>
           <Link
-            to="/places?category=restaurants"
+            to="/places?category=restaurant"
             className="nav-link text-white font-semibold"
           >
             {t("restaurants")}

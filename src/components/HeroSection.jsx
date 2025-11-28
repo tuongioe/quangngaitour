@@ -7,18 +7,9 @@ import {
   PlayCircleIcon,
 } from "@heroicons/react/16/solid";
 import { motion } from "framer-motion";
+import "../assets/styles/Global.css";
 
 const locations = [
-  {
-    name: "Núi Thiên Ấn",
-    place: "TP. Quảng Ngãi",
-    description:
-      "Núi Thiên Ấn, biểu tượng linh thiêng của Quảng Ngãi, nằm bên bờ sông Trà Khúc. Trên đỉnh núi có chùa Thiên Ấn cổ kính, phong cảnh hữu tình.",
-    bg: "https://res.cloudinary.com/ddwkzkht5/image/upload/v1760794809/nui-an-song-tra_1_fr1tab.png",
-    video: "https://www.youtube.com/embed/ixN6iid-4p8",
-    thumb:
-      "https://res.cloudinary.com/ddwkzkht5/image/upload/v1758275493/nui-thien-an-song-tra-vntrip_oiiybl.jpg",
-  },
   {
     name: "Đảo Lý Sơn",
     place: "Huyện Lý Sơn",
@@ -28,6 +19,16 @@ const locations = [
     video: "https://www.youtube.com/embed/YLuRbwYDY9Y",
     thumb:
       "https://res.cloudinary.com/ddwkzkht5/image/upload/v1758526841/daot_ly_son_ltwejg.jpg",
+  },
+  {
+    name: "Núi Thiên Ấn",
+    place: "TP. Quảng Ngãi",
+    description:
+      "Núi Thiên Ấn, biểu tượng linh thiêng của Quảng Ngãi, nằm bên bờ sông Trà Khúc. Trên đỉnh núi có chùa Thiên Ấn cổ kính, phong cảnh hữu tình.",
+    bg: "https://res.cloudinary.com/ddwkzkht5/image/upload/v1760794809/nui-an-song-tra_1_fr1tab.png",
+    video: "https://www.youtube.com/embed/ixN6iid-4p8",
+    thumb:
+      "https://res.cloudinary.com/ddwkzkht5/image/upload/v1758275493/nui-thien-an-song-tra-vntrip_oiiybl.jpg",
   },
   {
     name: "Biển Mỹ Khê",
@@ -64,17 +65,17 @@ export default function HeroSection() {
       style={{ backgroundImage: `url(${location.bg})` }}
     >
       {/* Content */}
-      <div className="relative h-[50rem] z-10 container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="relative h-[50rem] z-10 container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Left column */}
         <div className="flex flex-col justify-center">
-          <p className="text-lg mb-4 flex gap-2 uppercase font-bold items-center">
+          <p className="text-lg mb-4 flex gap-2 uppercase font-bold items-center text-shadow-lg">
             <MapPinIcon className="h-6 w-6" />
             {location.place}
           </p>
-          <h1 className="lg:text-7xl uppercase font-bold mb-4">
+          <h1 className="lg:text-7xl uppercase font-bold mb-4 text-shadow-hero">
             {location.name}
           </h1>
-          <p className="text-md mb-6 w-[450px] leading-relaxed text-justify">
+          <p className="text-md mb-6 w-[450px] leading-relaxed text-justify text-shadow-md">
             {location.description}
           </p>
           <div className="flex items-center space-x-4">
@@ -116,7 +117,7 @@ export default function HeroSection() {
                   style={{
                     width: "250px",
                     height: "400px",
-                    filter: isNext ? "brightness(0.5)" : "brightness(1)",
+                    filter: isNext ? "brightness(0.8)" : "brightness(1)",
                   }}
                 >
                   <img

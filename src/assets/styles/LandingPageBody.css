@@ -1,0 +1,52 @@
+.wave-bg {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  background: linear-gradient(120deg, #3ec5ff, #9aeaff);
+}
+
+/* 3 lớp sóng để tự nhiên hơn */
+.wave-bg::before,
+.wave-bg::after,
+.wave-bg .wave-layer {
+  content: "";
+  position: absolute;
+  width: 180%;
+  height: 180%;
+  left: -40%;
+  background-repeat: no-repeat;
+  filter: blur(80px);
+  opacity: 0.45;
+}
+
+/* Blobs 1 */
+.wave-bg::before {
+  top: -30%;
+  background-image: radial-gradient(
+    circle at 30% 40%,
+    #ffffff 0%,
+    transparent 60%
+  );
+}
+
+/* Blobs 2 */
+.wave-bg::after {
+  top: 20%;
+  background-image: radial-gradient(
+    circle at 70% 60%,
+    #ffffff 0%,
+    transparent 65%
+  );
+}
+
+/* Blobs 3 - thêm chiều sâu */
+.wave-bg .wave-layer {
+  top: 40%;
+  background-image: radial-gradient(
+    circle at 50% 80%,
+    #ffffff 0%,
+    transparent 70%
+  );
+  transform: rotate(20deg);
+}
